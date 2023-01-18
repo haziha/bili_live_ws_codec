@@ -12,10 +12,10 @@ type SI = uint32 // Sequence ID
 type BD = []byte // Body
 
 const (
-	PvNormal  PV = 0 // 普通数据
-	PvPopular PV = 1 // 人气值
-	PvZlib    PV = 2 // zlib压缩
-	PvBrotli  PV = 3 // brotli压缩
+	PvNormal PV = 0 // 普通包正文不使用压缩
+	PvAuth   PV = 1 // 心跳及认证包正文不使用压缩
+	PvZlib   PV = 2 // 普通包正文使用zlib压缩
+	PvBrotli PV = 3 // 普通包正文使用brotli压缩,解压为一个带头部的协议普通包
 )
 
 const (
