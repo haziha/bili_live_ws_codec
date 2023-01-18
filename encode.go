@@ -14,6 +14,7 @@ func (_this *Packet) Encode() (content BD, err error) {
 	}()
 	_this.PacketLength = _this.HeaderSize() + _this.BodySize()
 	_this.HeaderLength = uint16(_this.HeaderSize())
+	_this.SequenceId = SiDefault
 	buf := bytes.Buffer{}
 	for _, field := range []any{_this.PacketLength, _this.HeaderLength, _this.ProtocolVersion, _this.Operation, _this.SequenceId} {
 		err = binary.Write(&buf, binary.BigEndian, field)

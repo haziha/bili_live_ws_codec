@@ -11,6 +11,21 @@ type OP = uint32 // Operation
 type SI = uint32 // Sequence ID
 type BD = []byte // Body
 
+const (
+	PvNormal  PV = 0 // 普通数据
+	PvPopular PV = 1 // 人气值
+	PvZlib    PV = 2 // zlib压缩
+	PvBrotli  PV = 3 // brotli压缩
+)
+
+const (
+	OpJoinRoom OP = 7 // 申请进入房间
+)
+
+const (
+	SiDefault SI = 1
+)
+
 type PacketHeader struct {
 	PacketLength    PL
 	HeaderLength    HL
