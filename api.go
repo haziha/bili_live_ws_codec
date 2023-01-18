@@ -2,6 +2,12 @@ package bili_live_ws_codec
 
 import "encoding/json"
 
+func (_this *Packet) Heartbeat() {
+	_this.ProtocolVersion = PvPopular
+	_this.Operation = OpHeartbeat
+	_this.Body = []byte(`[object Object]`)
+}
+
 func (_this *Packet) JoinRoom(uid json.Number, roomId json.Number, protoVer int, platform string, type_ int, key string) (err error) {
 	jr := struct {
 		Uid      json.Number `json:"uid"`

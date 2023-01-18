@@ -19,7 +19,8 @@ const (
 )
 
 const (
-	OpJoinRoom OP = 7 // 申请进入房间
+	OpHeartbeat OP = 2
+	OpJoinRoom  OP = 7 // 申请进入房间
 )
 
 const (
