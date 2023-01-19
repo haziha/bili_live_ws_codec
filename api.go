@@ -8,12 +8,32 @@ import (
 	"io"
 )
 
-func (_this *Packet) IsZlib() bool {
+func (_this *Packet) IsPvZlib() bool {
 	return _this.ProtocolVersion == PvZlib
 }
 
-func (_this *Packet) IsBrotli() bool {
+func (_this *Packet) IsPvBrotli() bool {
 	return _this.ProtocolVersion == PvBrotli
+}
+
+func (_this *Packet) IsPvNormal() bool {
+	return _this.ProtocolVersion == PvNormal
+}
+
+func (_this *Packet) IsPvAuth() bool {
+	return _this.ProtocolVersion == PvAuth
+}
+
+func (_this *Packet) IsOpHeartbeatReply() bool {
+	return _this.Operation == OpHeartbeatReply
+}
+
+func (_this *Packet) IsOpNormal() bool {
+	return _this.Operation == OpNormal
+}
+
+func (_this *Packet) IsJoinRoomReply() bool {
+	return _this.Operation == OpJoinRoomReply
 }
 
 func (_this *Packet) ZlibDecompress() (content []byte, err error) {

@@ -19,8 +19,11 @@ const (
 )
 
 const (
-	OpHeartbeat OP = 2
-	OpJoinRoom  OP = 7 // 申请进入房间
+	OpHeartbeat      OP = 2 // 心跳包
+	OpHeartbeatReply OP = 3 //心跳包回复(人气值)
+	OpNormal         OP = 5 //普通包
+	OpJoinRoom       OP = 7 // 申请进入房间
+	OpJoinRoomReply  OP = 8 // 进入房间回复
 )
 
 const (
