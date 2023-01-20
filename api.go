@@ -32,7 +32,7 @@ func (_this *Packet) IsOpNormal() bool {
 	return _this.Operation == OpNormal
 }
 
-func (_this *Packet) IsJoinRoomReply() bool {
+func (_this *Packet) IsOpJoinRoomReply() bool {
 	return _this.Operation == OpJoinRoomReply
 }
 
