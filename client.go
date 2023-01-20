@@ -58,7 +58,7 @@ func (_this *Client) Connect() (err error) {
 		return
 	}
 	p := new(Packet)
-	err = p.JoinRoom2(_this.roomId, danMuInfo.Data.Token)
+	err = p.JoinRoomBrotli(_this.roomId, danMuInfo.Data.Token)
 	if err != nil {
 		return
 	}
@@ -71,7 +71,7 @@ func (_this *Client) ReadPacket(packet *Packet) (err error) {
 	if err != nil {
 		return
 	}
-	err = packet.Decode(bytes.NewReader(body))
+	err = packet.Decode(bytes.NewBuffer(body))
 	return
 }
 

@@ -7,8 +7,8 @@ import (
 	"io"
 )
 
-func (_this *Packet) Decode(buf *bytes.Reader) (err error) {
-	if uint32(buf.Size()) < _this.HeaderSize() {
+func (_this *Packet) Decode(buf *bytes.Buffer) (err error) {
+	if uint32(buf.Len()) < _this.HeaderSize() {
 		err = fmt.Errorf("buffer size small than header size")
 		return
 	}
@@ -26,7 +26,7 @@ func (_this *Packet) Decode(buf *bytes.Reader) (err error) {
 		err = fmt.Errorf("header length unequal 16, maybe protocol updated")
 		return
 	}
-	if uint32(buf.Size()) < _this.PacketLength-_this.HeaderSize() {
+	if uint32(buf.Len()) < _this.PacketLength-_this.HeaderSize() {
 		err = fmt.Errorf("buffer size small than required body size")
 		return
 	}

@@ -1,6 +1,7 @@
 package bili_live_ws_codec
 
 import (
+	"bytes"
 	"unsafe"
 )
 
@@ -51,6 +52,8 @@ func (pH *PacketHeader) HeaderSize() uint32 {
 type Packet struct {
 	PacketHeader
 	Body BD
+
+	bodyBuffer *bytes.Buffer
 }
 
 func (_this *Packet) BodySize() uint32 {

@@ -3,6 +3,7 @@ package bili_live_ws_codec
 import (
 	"bytes"
 	"compress/zlib"
+	"encoding/binary"
 	"encoding/json"
 	"github.com/andybalholm/brotli"
 	"io"
@@ -24,8 +25,15 @@ func (_this *Packet) IsPvAuth() bool {
 	return _this.ProtocolVersion == PvAuth
 }
 
-func (_this *Packet) IsOpHeartbeatReply() bool {
-	return _this.Operation == OpHeartbeatReply
+func (_this *Packet) IsOpHeartbeatReply() (popularity uint32, b bool) {
+	b = _this.Operation == OpHeartbeatReply
+	if b {
+		err := binary.Read(bytes.NewReader(_this.Body), binary.BigEndian, &popularity)
+		if err != nil {
+			popularity = 0
+		}
+	}
+	return
 }
 
 func (_this *Packet) IsOpNormal() bool {
@@ -92,6 +100,37 @@ func (_this *Packet) JoinRoom(uid json.Number, roomId json.Number, protoVer int,
 	return
 }
 
-func (_this *Packet) JoinRoom2(roomId json.Number, key string) (err error) {
+func (_this *Packet) JoinRoomBrotli(roomId json.Number, key string) (err error) {
 	return _this.JoinRoom("0", roomId, 3, "web", 2, key)
+}
+
+func (_this *Packet) JoinRoomZlib(roomId json.Number, key string) (err error) {
+	return _this.JoinRoom("0", roomId, 2, "web", 2, key)
+}
+
+func (_this *Packet) DecompressNext() (next bool, err error) {
+	if _this.bodyBuffer == nil {
+		_this.bodyBuffer = new(bytes.Buffer)
+	}
+	if _this.IsPvZlib() {
+		content, err := _this.ZlibDecompress()
+		if err == nil {
+			_, _ = _this.bodyBuffer.Write(content)
+		}
+	} else if _this.IsPvBrotli() {
+		content, err := _this.BrotliDecompress()
+		if err == nil {
+			_, _ = _this.bodyBuffer.Write(content)
+		}
+	}
+	if _this.bodyBuffer.Len() == 0 {
+		next = false
+		err = nil
+	} else if err = _this.Decode(_this.bodyBuffer); err != nil {
+		_this.bodyBuffer = nil
+		next = false
+	} else {
+		next = true
+	}
+	return
 }
