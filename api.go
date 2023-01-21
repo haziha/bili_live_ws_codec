@@ -62,15 +62,11 @@ func (_this *Packet) BrotliDecompress() (content []byte, err error) {
 	return
 }
 
-func (_this *Packet) DeepCopy() (packet *Packet, err error) {
+func (_this *Packet) DeepCopy() (packet *Packet) {
 	_packet := new(Packet)
 	_packet.PacketHeader = _this.PacketHeader
-	buf := new(bytes.Buffer)
-	_, err = io.Copy(buf, bytes.NewReader(_this.Body))
-	if err != nil {
-		return
-	}
-	_packet.Body = buf.Bytes()
+	_packet.Body = make(BD, 0, len(_this.Body))
+	_packet.Body = append(_packet.Body, _this.Body...)
 	packet = _packet
 	return
 }
