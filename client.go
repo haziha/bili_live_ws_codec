@@ -19,6 +19,10 @@ type Client struct {
 	cancelFunc context.CancelFunc
 }
 
+func (_this *Client) Close() (err error) {
+	return _this.conn.Close()
+}
+
 func (_this *Client) Connect() (err error) {
 	_this.ctx, _this.cancelFunc = context.WithCancel(context.Background())
 	roomInit, err := GetRoomInit(_this.roomId)
