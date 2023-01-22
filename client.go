@@ -12,11 +12,20 @@ import (
 )
 
 type Client struct {
-	roomId json.Number
-	conn   net.Conn
+	roomId     json.Number
+	realRoomId json.Number
+	conn       net.Conn
 
 	ctx        context.Context
 	cancelFunc context.CancelFunc
+}
+
+func (_this *Client) RoomId() json.Number {
+	return _this.roomId
+}
+
+func (_this *Client) RealRoomId() json.Number {
+	return _this.realRoomId
 }
 
 func (_this *Client) Close() (err error) {
@@ -34,8 +43,8 @@ func (_this *Client) Connect() (err error) {
 		err = fmt.Errorf("GetRoomInit code(%s) fail: %s", roomInit.Code, roomInit.Message)
 		return
 	}
-	_this.roomId = roomInit.Data.RoomId
-	danMuInfo, err := GetDanMuInfo(_this.roomId)
+	_this.realRoomId = roomInit.Data.RoomId
+	danMuInfo, err := GetDanMuInfo(_this.realRoomId)
 	if err != nil {
 		err = fmt.Errorf("GetDanMuInfo call fail: %v", err)
 		return
@@ -62,7 +71,7 @@ func (_this *Client) Connect() (err error) {
 		return
 	}
 	p := new(Packet)
-	err = p.JoinRoomBrotli(_this.roomId, danMuInfo.Data.Token)
+	err = p.JoinRoomBrotli(_this.realRoomId, danMuInfo.Data.Token)
 	if err != nil {
 		return
 	}
