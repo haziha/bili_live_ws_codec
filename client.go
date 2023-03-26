@@ -98,11 +98,22 @@ func (_this *Client) WritePacket(packet *Packet) (err error) {
 }
 
 func (_this *Client) Read() (body []byte, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			body = nil
+			err = fmt.Errorf("Client.Read panic: %v", e)
+		}
+	}()
 	body, err = wsutil.ReadServerBinary(_this.conn)
 	return
 }
 
 func (_this *Client) Write(body []byte) (err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			err = fmt.Errorf("Client.Write panic: %v", e)
+		}
+	}()
 	err = wsutil.WriteClientBinary(_this.conn, body)
 	return
 }
