@@ -29,6 +29,11 @@ func (_this *Client) RealRoomId() json.Number {
 }
 
 func (_this *Client) Close() (err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			err = fmt.Errorf("close panic: %v", e)
+		}
+	}()
 	return _this.conn.Close()
 }
 
